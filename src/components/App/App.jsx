@@ -6,26 +6,44 @@ import Filter from '../filter/Filter';
 export class App extends Component {
   state = {
     contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
   };
 
+  componentDidMount(){
+  const storageContact = localStorage.getItem('contact');
+  const contactParse = JSON.parse(storageContact);
+console.log(contactParse);
+  if (contactParse) {
+    this.setState({contacts: contactParse})
+  }
+
+  }
+
+  componentDidUpdate(_, prevState){
+    if (prevState !== this.state) {
+      console.log(this.state.contacts);
+      localStorage.setItem('contact', JSON.stringify(this.state.contacts))
+    }
+  }
+
   addInState = data => {
     const nameContact = this.state.contacts.find(obj => obj.name.toLowerCase() === data.name.toLowerCase());
-    console.log(nameContact);
     if (!nameContact) {
       const contact = { name: data.name, number: data.number, id: data.id };
       this.setState(prevState => ({
         contacts: [...prevState.contacts, contact],
       }));
+
     } else {
       alert('Такий контакт вже існує');
     }
   };
+
 
   // listContacts = () => {
   //   return this.state;
